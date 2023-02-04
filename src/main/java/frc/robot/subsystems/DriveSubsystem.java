@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,11 +27,17 @@ public class DriveSubsystem extends SubsystemBase {
   private DifferentialDrive m_drive;
   private MotorControllerGroup m_leftMotors;
 
-  private AHRS m_gyro; // https://www.kauailabs.com/dist/frc/2022/navx_frc.json
+  private Encoder m_leftEncoder = new Encoder(
+      Constants.DIOPorts.kEncoderLeftPortA, Constants.DIOPorts.kEncoderLeftPortB);
+  private Encoder m_rightEncoder = new Encoder(
+      Constants.DIOPorts.kEncoderRightPortA, Constants.DIOPorts.kEncoderRightPortB);
+
+  private AHRS m_gyro;
+  // https://www.kauailabs.com/dist/frc/2022/navx_frc.json
 
   public DriveSubsystem() {
-    rightMotor1 = new CANSparkMax(Constants.CANID.rightDeviceID1, MotorType.kBrushed);
     rightMotor2 = new CANSparkMax(Constants.CANID.rightDeviceID2, MotorType.kBrushed);
+    rightMotor1 = new CANSparkMax(Constants.CANID.rightDeviceID1, MotorType.kBrushed);
     leftMotor1 = new CANSparkMax(Constants.CANID.leftDeviceID1, MotorType.kBrushed);
     leftMotor2 = new CANSparkMax(Constants.CANID.leftDeviceID2, MotorType.kBrushed);
 
@@ -51,9 +58,31 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putString("Angle", m_gyro.getAngle() + "");
     SmartDashboard.putString("Roll", m_gyro.getRoll() + "");
-    SmartDashboard.putString("Yaw", m_gyro.getYaw()+ "");
-    SmartDashboard.putString("Pitch", m_gyro.getPitch()+ "");
+    SmartDashboard.putString("Yaw", m_gyro.getYaw() + "");
+    SmartDashboard.putString("Pitch", m_gyro.getPitch() + ""); 
+    SmartDashboard.putNumber("Left Distance", m_leftEncoder.getDistance());
+    SmartDashboard.putNumber("Right Distance", m_rightEncoder.getDistance());
+    SmartDashboard.putNumber("Left Speed", m_leftEncoder.getRate());
+    SmartDashboard.putNumber("Right Speed", m_rightEncoder.getRate());
+    SmartDashboard.putNumber("Left Raw", m_leftEncoder.getRaw());
+    SmartDashboard.putNumber("Right Raw", m_rightEncoder.getRaw());
     // SmartDashboard.putBoolean("At Setpoint", m_turnController.atSetpoint());
+  }
+
+  //  private double kDriveTick2Feet = 1.0 / 128 * 6 * Math.PI / 12;
+  public double getDistance() {
+    // return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2;
+    if (m_leftEncoder.getDistance() > m_rightEncoder.getDistance())
+      return m_leftEncoder.getDistance();
+    return m_rightEncoder.getDistance();
+  }
+
+  public double getLeftDistance() {
+    return m_leftEncoder.getDistance();
+  }
+
+  public double getRightDistance() {
+    return m_rightEncoder.getDistance();
   }
 
   public void setLeftMotors(double speed) {
@@ -95,7 +124,8 @@ public class DriveSubsystem extends SubsystemBase {
   public void reset() {
     if (m_gyro != null)
       m_gyro.reset();
-
+    m_leftEncoder.reset();
+    m_rightEncoder.reset();
   }
 
   public void resetGyro() {
@@ -105,7 +135,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
-  private static double limit(double velocity, double limit) {
+  public static double limit(double velocity, double limit) {
     if (velocity > limit)
       return limit;
     if (velocity < -limit)

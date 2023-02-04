@@ -14,7 +14,7 @@ public class TurnToAngle extends PIDCommand {
         super(new PIDController(Constants.Drive.kTurnP, Constants.Drive.kTurnI, Constants.Drive.kTurnD),
                 driveSubsystem::getHeading,
                 targetAngleDegrees,
-                output -> driveSubsystem.arcadeDrive(-forwardVelocity/2, -output/2),
+                output -> driveSubsystem.arcadeDrive(-forwardVelocity/2, DriveSubsystem.limit(-output, 0.5)),
                 driveSubsystem);
         
         this.m_driveSubsystem = driveSubsystem;

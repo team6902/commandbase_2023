@@ -19,31 +19,40 @@ import edu.wpi.first.wpilibj.SerialPort;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  
+
   public static final int kLeftStickY = 5;
   public static final int kRightStickY = 1;
   public static final int kDriveJoystick = 1;
-  public static final int kGameJoystick = 0; 
+  public static final int kGameJoystick = 0;
   public static final SerialPort.Port kGyroPort = SerialPort.Port.kUSB;
   public static final int kPneumaticsJoystick = 1;
   public static final int kPneumaticsSTART = 8;
   public static final int kPneumaticsRB = 5;
   public static final int kPneumaticsLB = 6;
-  public static final int kBalanceButtonY = 4;
-  public static final int kIntakeUpButtonY = 4;
-  public static final int kIntakeDownButtonA = 1;
-  public static final int kArmFowardButtonB = 2;
-  public static final int kArmBackwardButtonX = 3;
-  
+  public static final int kBalanceButtonY = 8;
+  public static final int kIntakeUpButtonLB = 5;
+  public static final int kIntakeDownButtonRB = 6;
+  public static final int kArmFowardButtonY = 4;
+  public static final int kArmBackwardButtonA = 1;
+  public static final double kIntakeSpeed = 0.5;
+  public static final double kArmSpeed = 0.7;
+  public static final double kElevadorSpeed = 0.8;
 
-  public class CANID{
+  public class CANID {
     public static final int rightDeviceID1 = 3;
     public static final int rightDeviceID2 = 4;
     public static final int leftDeviceID1 = 1;
     public static final int leftDeviceID2 = 2;
   }
 
-  public class Drive {
+  public class DIOPorts {
+    public static final int kEncoderRightPortA = 9;
+    public static final int kEncoderRightPortB = 8;
+    public static final int kEncoderLeftPortA = 7;
+    public static final int kEncoderLeftPortB = 6;
+  }
+
+  public class Drive {  // TODO: Ajustar valores
     public static final double kTurnP = 0.04;
     public static final double kTurnI = 0.06;
     public static final double kTurnD = 0.01;
@@ -52,13 +61,11 @@ public final class Constants {
     public static final double kBalanceD = 0.01;
     public static final double kToleranceDegrees = 5.0f;
     public static final double kTurnRateToleranceDegPerS = 10.0f;
-    public static final double kEncoderLeftP = 0.03;
-    public static final double kEncoderLeftI = 0.01;
+    public static final double kEncoderLeftP = 0.003;
+    public static final double kEncoderLeftI = 0.001;
     public static final double kEncoderLeftD = 0;
-    public static final double kEncoderRightP = 0.03;
-    public static final double kEncoderRightI = 0.01;
+    public static final double kEncoderRightP = 0.003;
+    public static final double kEncoderRightI = 0.001;
     public static final double kEncoderRightD = 0;
   }
 }
-
-

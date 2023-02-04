@@ -10,10 +10,10 @@ public class Balance extends PIDCommand {
     private DriveSubsystem m_driveSubsystem;
 
     public Balance(DriveSubsystem driveSubsystem) {
-        super(new PIDController(Constants.Drive.kBalanceP, Constants.Drive.kBalanceI, Constants.Drive.kBalanceD),
+        super(new PIDController(Constants.Drive.kBalanceP, Constants.Drive.kBalanceI, Constants.Drive.kBalanceD),  // TODO: Ajustar valores de PID
                 driveSubsystem::getPitch,
                 0,
-                output -> driveSubsystem.arcadeDrive(output/2, 0),
+                output -> driveSubsystem.arcadeDrive(output, 0), // TODO: output eh positivo ou negativo?
                 driveSubsystem);
         
         this.m_driveSubsystem = driveSubsystem;
