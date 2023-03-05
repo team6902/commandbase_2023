@@ -87,18 +87,20 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void setLeftMotors(double speed) {
     SmartDashboard.putNumber("setLeftMotors", speed);
-    m_leftMotors.set(speed);
+    m_leftMotors.set(0.5);
   }
 
   public void setRightMotors(double speed) {
     SmartDashboard.putNumber("setRightMotors", speed);
-    m_rightMotors.set(speed);
+    m_rightMotors.set(0.5);
   }
 
   public void tankDrive(double left, double right) {
     SmartDashboard.putNumber("tankDrive:left", left);
     SmartDashboard.putNumber("tankDrive:right", right);
     m_drive.tankDrive(left, right);
+  
+
   }
 
   public double getHeading() {
@@ -136,7 +138,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public static double limit(double velocity, double limit) {
-    if (velocity > limit)
+    if (velocity > limit) // colocar limite
       return limit;
     if (velocity < -limit)
       return -limit;

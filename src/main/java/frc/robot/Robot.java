@@ -10,6 +10,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,7 +19,7 @@ import frc.robot.vision.GamePieceColor;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  private Compressor compressor;
+  private Compressor compressor = new Compressor(1, PneumaticsModuleType.CTREPCM);
   private SendableChooser<GamePieceColor> m_colorChooser = new SendableChooser<>();
 
   private final RobotContainer m_robotContainer = new RobotContainer();
@@ -32,11 +33,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_colorChooser.setDefaultOption("PURPLE GamePiece", GamePieceColor.PURPLE);
     SmartDashboard.putData(m_colorChooser);
-
-    compressor = new Compressor(0, PneumaticsModuleType.CTREPCM); // TODO: Compressor nao esta funcionando ou nao esta parando automaticamente
-    // compressor.enableAnalog(40, 80);
     compressor.enableDigital();
-   
+
+
   }
 
   @Override
@@ -52,11 +51,13 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("LimelightX", x);
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
-    
     SmartDashboard.putBoolean("pressureSwitch", compressor.getPressureSwitchValue());
     SmartDashboard.putBoolean("compressor.isEnabled()", compressor.isEnabled());
     SmartDashboard.putNumber("pressure", compressor.getPressure());
     SmartDashboard.putNumber("compressor voltage", compressor.getAnalogVoltage());
+
+
+    
   
   }
 

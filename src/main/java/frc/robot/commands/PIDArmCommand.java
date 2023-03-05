@@ -12,7 +12,7 @@ public class PIDArmCommand extends PIDCommand {
 
   private final ElevatorArmSubsystem armSubsystem;
 
-
+  // TODO: Testar e ajustar valores de PID
   public PIDArmCommand(ElevatorArmSubsystem armSubsystem, double setpoint) {
     super(
         new PIDController(0.1, 0.0, 0.0), 

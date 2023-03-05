@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
+// robo gira ate encontrar o game piece
+// Provavelmente nao sera usado
+
 public class FindTarget extends PIDCommand {
 
     public static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");

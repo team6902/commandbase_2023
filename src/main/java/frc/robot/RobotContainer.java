@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -19,8 +21,9 @@ import frc.robot.commands.Balance;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriveStraight;
 import frc.robot.commands.FindGamePiece;
+import frc.robot.commands.PIDArmCommand;
 import frc.robot.commands.TurnToAngle;
-import frc.robot.commands.auto.TesteAuto;
+//import frc.robot.commands.auto.TesteAuto;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -31,13 +34,13 @@ public class RobotContainer {
   private final DriveSubsystem m_DriveSubsystem = new DriveSubsystem();
   public static final FindGamePieceRunner findGamePieceRunner = new FindGamePieceRunner(GamePieceColor.PURPLE);
   private Thread findGamePieceThread = new Thread(findGamePieceRunner);
-  SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+  private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
   private final Joystick m_stickdrive = new Joystick(Constants.kDriveJoystick);
   private final Joystick m_stickgame = new Joystick(Constants.kGameJoystick);
   private DriveCommand m_DriveCommand = new DriveCommand(m_DriveSubsystem, m_stickdrive);
   private final Balance m_Balance = new Balance(m_DriveSubsystem);
-  private final JoystickButton m_BalanceButtonY = new JoystickButton(m_stickgame, Constants.kBalanceButtonY);
+  private final JoystickButton m_BalanceButtonBACK= new JoystickButton(m_stickgame, Constants.kBalanceButtonBACK);
 
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final ElevatorArmSubsystem m_ElevatorArmSubsystem = new ElevatorArmSubsystem();
@@ -45,22 +48,26 @@ public class RobotContainer {
   private final JoystickButton m_PneumaticsRB = new JoystickButton(m_stickgame, Constants.kPneumaticsRB);
   private final JoystickButton m_PneumaticsLB = new JoystickButton(m_stickgame, Constants.kPneumaticsLB);
   private final JoystickButton m_PneumaticsSTART = new JoystickButton(m_stickgame, Constants.kPneumaticsSTART);
-  private final JoystickButton m_ArmFowardButtonY = new JoystickButton(m_stickgame, Constants.kArmFowardButtonY);
-  private final JoystickButton m_ArmBacwardButtonA = new JoystickButton(m_stickgame, Constants.kArmBackwardButtonA);
+  
+  private final JoystickButton m_ArmFowardButtonB = new JoystickButton(m_stickgame, Constants.kArmFowardButtonB);
+  private final JoystickButton m_ArmBacwardButtonX = new JoystickButton(m_stickgame, Constants.kArmBackwardButtonX);
 
-  private final JoystickButton m_IntakeUpButtonLB = new JoystickButton(m_stickdrive, Constants.kIntakeUpButtonLB);
-  private final JoystickButton m_IntakeDownButtonRB = new JoystickButton(m_stickdrive, Constants.kIntakeDownButtonRB);
+  private final JoystickButton m_IntakeUpButtonY = new JoystickButton(m_stickgame, Constants.kIntakeUpButtonY);
+  private final JoystickButton m_IntakeDownButtonA = new JoystickButton(m_stickgame, Constants.kIntakeDownButtonA);
 
   private final JoystickButton m_aimButton = new JoystickButton(m_stickdrive, 1);
   private final JoystickButton m_detectGamePieceButton = new JoystickButton(m_stickdrive, 2);
   private final JoystickButton m_findCargoPurpleButton = new JoystickButton(m_stickdrive, 3);
   private final JoystickButton m_findCargoYellowButton = new JoystickButton(m_stickdrive, 4);
 
+ 
   public RobotContainer() {
+    
+
     configureBindings();
     
     m_autoChooser.setDefaultOption("1 - [AUTO MAIN]", new DriveStraight(1000, m_DriveSubsystem)); 
-    m_autoChooser.addOption("1 - [TEST] Auto", new TesteAuto(m_DriveSubsystem));
+   // m_autoChooser.addOption("1 - [TEST] Auto", new TesteAuto(m_DriveSubsystem));
     // m_autoChooser.addOption("10 - [TEST] Drive forward", auto);
 
     SmartDashboard.putData(m_autoChooser);
@@ -85,20 +92,22 @@ public class RobotContainer {
         .whileTrue(new InstantCommand(() -> findGamePieceRunner.setGamePieceColor(null))
             .andThen(new AimGamePiece(m_DriveSubsystem)));
 
-    m_BalanceButtonY.whileTrue(new Balance(m_DriveSubsystem));
+    m_BalanceButtonBACK.whileTrue(new Balance(m_DriveSubsystem));
+
+    // m_ArmFowardButton.whileTrue(new PIDArmCommand(m_ElevatorArmSubsystem, VALOR_A_DEFINIR));
 
     m_PneumaticsLB.onTrue(new InstantCommand(() -> m_IntakeSubsystem.armLeftClose(), m_IntakeSubsystem));
     m_PneumaticsSTART.onTrue(new InstantCommand(() -> m_IntakeSubsystem.bothArmOpen(), m_IntakeSubsystem));
     m_PneumaticsRB.onTrue(new InstantCommand(() -> m_IntakeSubsystem.bothArmClose(), m_IntakeSubsystem));
 
-    m_IntakeUpButtonLB.whileTrue(new StartEndCommand(() -> m_IntakeSubsystem.intakeUp(),
+    m_IntakeUpButtonY.whileTrue(new StartEndCommand(() -> m_IntakeSubsystem.intakeUp(),
         () -> m_IntakeSubsystem.intakeStop(), m_IntakeSubsystem));
-    m_IntakeDownButtonRB.whileTrue(new StartEndCommand(() -> m_IntakeSubsystem.intakeDown(),
+    m_IntakeDownButtonA.whileTrue(new StartEndCommand(() -> m_IntakeSubsystem.intakeDown(),
         () -> m_IntakeSubsystem.intakeStop(), m_IntakeSubsystem));
 
-    m_ArmFowardButtonY.whileTrue(new StartEndCommand(() -> m_ElevatorArmSubsystem.armFoward(),
+    m_ArmFowardButtonB.whileTrue(new StartEndCommand(() -> m_ElevatorArmSubsystem.armFoward(),
         () -> m_ElevatorArmSubsystem.armStop(), m_ElevatorArmSubsystem));
-    m_ArmBacwardButtonA.whileTrue(new StartEndCommand(() -> m_ElevatorArmSubsystem.armBackward(),
+    m_ArmBacwardButtonX.whileTrue(new StartEndCommand(() -> m_ElevatorArmSubsystem.armBackward(),
         () -> m_ElevatorArmSubsystem.armStop(), m_ElevatorArmSubsystem));
 
     new POVButton(m_stickgame, 0)

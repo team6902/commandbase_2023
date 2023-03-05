@@ -27,16 +27,17 @@ public final class Constants {
   public static final SerialPort.Port kGyroPort = SerialPort.Port.kUSB;
   public static final int kPneumaticsJoystick = 1;
   public static final int kPneumaticsSTART = 8;
-  public static final int kPneumaticsRB = 5;
-  public static final int kPneumaticsLB = 6;
-  public static final int kBalanceButtonY = 8;
-  public static final int kIntakeUpButtonLB = 5;
-  public static final int kIntakeDownButtonRB = 6;
-  public static final int kArmFowardButtonY = 4;
-  public static final int kArmBackwardButtonA = 1;
+  public static final int kPneumaticsRB = 6;
+  public static final int kPneumaticsLB = 5;
+  public static final int kBalanceButtonBACK = 7;
+  public static final int kIntakeUpButtonY = 4;
+  public static final int kIntakeDownButtonA = 1;
+  public static final int kArmFowardButtonB = 2;
+  public static final int kArmBackwardButtonX = 3;
   public static final double kIntakeSpeed = 0.5;
-  public static final double kArmSpeed = 0.7;
-  public static final double kElevadorSpeed = 0.8;
+  public static final double kArmSpeedFoward = 0.3;
+  public static final double kArmSpeedBackward = 0.5;
+  public static final double kElevadorSpeed = 1;
 
   public class CANID {
     public static final int rightDeviceID1 = 3;
@@ -53,12 +54,12 @@ public final class Constants {
   }
 
   public class Drive {  // TODO: Ajustar valores
-    public static final double kTurnP = 0.04;
-    public static final double kTurnI = 0.06;
-    public static final double kTurnD = 0.01;
-    public static final double kBalanceP = 0.04;
-    public static final double kBalanceI = 0.06;
-    public static final double kBalanceD = 0.01;
+    public static final double kTurnP = 1;
+    public static final double kTurnI = 1;
+    public static final double kTurnD = 1;
+    public static final double kBalanceP = 1;
+    public static final double kBalanceI = 1;
+    public static final double kBalanceD = 1;
     public static final double kToleranceDegrees = 5.0f;
     public static final double kTurnRateToleranceDegPerS = 10.0f;
     public static final double kEncoderLeftP = 0.003;

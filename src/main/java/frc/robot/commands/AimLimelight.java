@@ -19,7 +19,7 @@ public class AimLimelight extends PIDCommand {
    public AimLimelight(DriveSubsystem driveSubsystem, boolean keepGoingIfNotDetected) { 
        super(
                new PIDController(0.08, 0.03, 0.03),  // TODO: Ajustar valores de PID e criar constantes no arquivo Constants.java
-               AimLimelight::getX, //get do encoder
+               AimLimelight::getX, 
                0,
                output -> {
                 driveSubsystem.arcadeDrive(-0.5, output, 0.6); // TODO: Ajustar valor xSpeed e limit

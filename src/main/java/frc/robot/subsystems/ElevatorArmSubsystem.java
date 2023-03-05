@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -19,7 +20,9 @@ public class ElevatorArmSubsystem extends SubsystemBase {
   private final VictorSPX m_LeftElevator;
   private final VictorSPX m_RightArm;
   private final VictorSPX m_LeftArm;
-  public Encoder encoderArm;
+  private final double kDriveTick2Feet = 1.0/128 * 6 *Math.PI/12;
+  public Encoder encoderArmL;
+  public Encoder encoderArmR;
 
   public ElevatorArmSubsystem() {
 
@@ -27,7 +30,11 @@ public class ElevatorArmSubsystem extends SubsystemBase {
     m_RightElevator = new VictorSPX(6);
     m_RightArm = new VictorSPX(8);
     m_LeftArm = new VictorSPX(7);
-    encoderArm = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
+    encoderArmL = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
+    encoderArmR = new Encoder(2, 3, true, EncodingType.k4X);
+    encoderArmL.setDistancePerPulse((3.141592*5)/360);
+    encoderArmR.setDistancePerPulse((3.141592*5)/360);
+
 
   }
 
@@ -57,16 +64,18 @@ public class ElevatorArmSubsystem extends SubsystemBase {
   public void armFoward() {
 
     SmartDashboard.putBoolean("arm", true);
-    m_RightArm.set(VictorSPXControlMode.PercentOutput, Constants.kArmSpeed); // positivo
-    m_LeftArm.set(VictorSPXControlMode.PercentOutput, -Constants.kArmSpeed); // negativo
+    m_RightArm.set(VictorSPXControlMode.PercentOutput, Constants.kArmSpeedFoward); // positivo
+    m_LeftArm.set(VictorSPXControlMode.PercentOutput, -Constants.kArmSpeedBackward); // negativo
+    encoderArmL.reset();
+    encoderArmR.reset();
 
   }
 
   public void armBackward() {
 
     SmartDashboard.putBoolean("arm", true);
-    m_RightArm.set(VictorSPXControlMode.PercentOutput, -Constants.kArmSpeed); // negativo
-    m_LeftArm.set(VictorSPXControlMode.PercentOutput, Constants.kArmSpeed); // positivo
+    m_RightArm.set(VictorSPXControlMode.PercentOutput, -Constants.kArmSpeedBackward); // negativo
+    m_LeftArm.set(VictorSPXControlMode.PercentOutput, Constants.kArmSpeedBackward); // positivo
 
   }
 
@@ -83,16 +92,15 @@ public class ElevatorArmSubsystem extends SubsystemBase {
     m_LeftArm.set(VictorSPXControlMode.PercentOutput, -speed);
   }
 
-  public void resetEncoderArm(){
-    encoderArm.reset();
-  }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Encoder Arm", encoderArm.getDistance());
+    SmartDashboard.putNumber("Encoder ArmL", encoderArmL.get() *kDriveTick2Feet);
+    SmartDashboard.putNumber("Encoder ArmR", encoderArmR.get() *kDriveTick2Feet);
+
   }
 
   public double getEncoderArm() {
-      return encoderArm.getRaw();
+      return encoderArmL.getRaw(); // TODO: Ajustar para cm ou testar valor raw
   }
 }

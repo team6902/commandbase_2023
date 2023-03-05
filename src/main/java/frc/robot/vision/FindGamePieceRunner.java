@@ -87,18 +87,17 @@ public class FindGamePieceRunner implements Runnable {
             }
 
             if (gamePieceColor != null && gamePieceColor == GamePieceColor.PURPLE) {
-                hslThresholdHue[0] = 100;  // TODO: ajustar valores
-                hslThresholdHue[1] = 200;  // TODO: ajustar valores
+                hslThresholdHue[0] = 110;  
+                hslThresholdHue[1] = 150; 
             } else if (gamePieceColor != null && gamePieceColor == GamePieceColor.YELLOW) {
-                hslThresholdHue[0] = 20;   // TODO: ajustar valores
-                hslThresholdHue[1] = 100;  // TODO: ajustar valores
+                hslThresholdHue[0] = 20; 
+                hslThresholdHue[1] = 50;  
             } else if (gamePieceColor == null && tryToDetect == GamePieceColor.PURPLE) {
-                hslThresholdHue[0] = 100;  // TODO: ajustar valores (pegar acima)
-                hslThresholdHue[1] = 200;  // TODO: ajustar valores (pegar acima)
+                hslThresholdHue[0] = 110;  
+                hslThresholdHue[1] = 150; 
             } else if (gamePieceColor == null && tryToDetect == GamePieceColor.YELLOW) {
-                hslThresholdHue[0] = 100;  // TODO: ajustar valores (pegar acima)
-                hslThresholdHue[1] = 200;  // TODO: ajustar valores (pegar acima)
-            }
+                hslThresholdHue[0] = 20; 
+                hslThresholdHue[1] = 50;  
 
             if (cvSink.grabFrame(frame) == 0) {
               outputStream.notifyError(cvSink.getError());
@@ -142,7 +141,7 @@ public class FindGamePieceRunner implements Runnable {
                         detected = false;
                     }
                     if ((gamePieceColor == null && tryToDetect == GamePieceColor.YELLOW) || gamePieceColor == GamePieceColor.YELLOW) {
-                        if ((area < 2000 && area > 250 && circulariy > 0.75) || area > 2000 && circulariy > 0.4) { // TODO: Ajustar valores
+                        if ((area < 4500 && area > 1800 && circulariy > 0.2)) { 
                             detected = true;
                             this.centerX = center.x;
                             this.centerY = center.y;
@@ -153,7 +152,7 @@ public class FindGamePieceRunner implements Runnable {
                             detected = false;
                         }
                     } else if ((gamePieceColor == null && tryToDetect == GamePieceColor.PURPLE) || gamePieceColor == GamePieceColor.PURPLE) {
-                        if ((area < 2000 && area > 250 && circulariy > 0.4) || area > 2000 && circulariy > 0.2) { // TODO: Ajustar valores
+                        if ((area < 8000 && area > 2000 && circulariy > 0.4)){ 
                             detected = true;
                             this.centerX = center.x;
                             this.centerY = center.y;
@@ -178,3 +177,5 @@ public class FindGamePieceRunner implements Runnable {
                 
     }
 }
+}
+
